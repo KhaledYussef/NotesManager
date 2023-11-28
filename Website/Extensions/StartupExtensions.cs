@@ -25,7 +25,16 @@ namespace Website.Extensions
         //---------------------------------------------------------------------------
         public static void AddMyIdentity(this IServiceCollection services, IConfiguration Configuration)
         {
-            services.AddIdentity<ApplicationUser,IdentityRole>()
+            services.AddIdentity<ApplicationUser,IdentityRole>(o=>
+            {
+                o.SignIn.RequireConfirmedAccount = false;
+                o.Password.RequireDigit = false;
+                o.Password.RequiredLength = 6;
+                o.Password.RequireLowercase = false;
+                o.Password.RequireNonAlphanumeric = false;
+                o.Password.RequireUppercase = false;
+                o.User.RequireUniqueEmail = true;
+            })
                 .AddRoles<IdentityRole>()
                   .AddEntityFrameworkStores<AppDbContext>()
                   .AddDefaultTokenProviders();
@@ -43,6 +52,7 @@ namespace Website.Extensions
             {
                 option.DefaultScheme = IdentityConstants.ApplicationScheme;
                 option.DefaultSignInScheme = IdentityConstants.ExternalScheme;
+
             })
             .AddJwtBearer(option =>
             {

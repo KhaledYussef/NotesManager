@@ -1,5 +1,7 @@
 ﻿@model Data.DTOs.LoginDTO
-
+@{
+    Layout = "~/Views/Shared/_LayoutAuth.cshtml";
+}
 <style>
     .login-page {
         background-color: #fff;
@@ -43,7 +45,7 @@
                     </div>
                 </form>
 
-            
+
 
                 <p class="mb-1">
                     <a asp-action="ForgetPassword">I forgot my password</a>
