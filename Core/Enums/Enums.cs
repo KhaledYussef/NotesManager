@@ -13,4 +13,11 @@
         UserImage,
         NoteImage,
     }
+
+
+    public enum EmailType
+    {
+        ConfirmAccount,
+        ResetPassword,
+    }
 }

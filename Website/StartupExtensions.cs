@@ -5,13 +5,17 @@ using Data.DbContext;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
+using Pal.Services.Email;
 using Pal.Services.FileManager;
+using Pal.Web.Extensions;
+
+using Service;
 
 using Services.LoggerService;
 
 using System.Text;
 
-namespace Website.Extensions
+namespace Website
 {
     public static class StartupExtensions
     {
@@ -25,7 +29,7 @@ namespace Website.Extensions
         //---------------------------------------------------------------------------
         public static void AddMyIdentity(this IServiceCollection services, IConfiguration Configuration)
         {
-            services.AddIdentity<ApplicationUser,IdentityRole>(o=>
+            services.AddIdentity<ApplicationUser, IdentityRole>(o =>
             {
                 o.SignIn.RequireConfirmedAccount = false;
                 o.Password.RequireDigit = false;
@@ -78,7 +82,18 @@ namespace Website.Extensions
         {
             services.AddScoped<IFileManagerService, FileManagerService>();
             services.AddScoped(typeof(ILoggerService<>), typeof(LoggerService<>));
+            services.AddScoped<INotesService, NotesService>();
+            services.AddScoped<IEmailService, EmailService>();
 
         }
+
+
+        //---------------------------------------------------------------------------
+        public static void AddMyActionFilters(this IServiceCollection services)
+        {
+            services.AddScoped<CheckUserAttribute>();
+
+        }
+
     }
 }

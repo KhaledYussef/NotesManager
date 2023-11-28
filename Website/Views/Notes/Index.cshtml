@@ -1,0 +1,67 @@
+﻿@model ICollection<Data.DTOs.NoteDTO>
+
+@{
+    ViewBag.Title = "My Notes";
+}
+
+
+<div class="row">
+    <div class="col-md-12">
+
+        <div class="row">
+
+            @foreach (var note in Model)
+            {
+                <div class="col-sm-12 col-md-6 col-lg-4" id="note-@note.Id">
+
+                    <div class="card card-outline">
+
+                        <div class="card-header" style="background-color:@note.Color">
+                            <h3 class="card-title"> @(@note.Title.Length > 50 ? @note.Title[..50] + " ..." : @note.Title) </h3>
+                            <div class="card-tools">
+                                <button type="button" class="btn btn-tool" onclick="onDelete(@note.Id)">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                                <a href="/Notes/Manage/@note.Id" class="btn btn-tool">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </div>
+                        </div>
+                        @if (!string.IsNullOrEmpty(note.ImageUrl))
+                        {
+                            <img src="@note.ImageUrl" class="card-img-top">
+                        }
+                        <div class="card-body">
+                            <p class="card-text">@note.Content</p>
+                        </div>
+                    </div>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+
+    <script>
+        function onDelete(id) {
+            ConfirmAlert('Are You Sure?', function () {
+                $.ajax({
+                    url: '/Notes/Delete/' + id,
+                    type: 'Post',
+                    success: function (res) {
+                        if (res.isSuccess) {
+                            // remove the deleted note from the list
+                            $('#note-' + id).remove();
+                        } else {
+                            ErrorDialog('Error', res.errors[0]);
+                        }
+                    }
+                });
+
+            })
+        }
+    </script>
+}
