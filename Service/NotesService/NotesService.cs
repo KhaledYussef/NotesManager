@@ -197,5 +197,64 @@ namespace Service
         }
 
 
+        // share note to all users
+        public async Task<ResponseResult> ShareNoteAsync(int noteId, string shareLink)
+        {
+            try
+            {
+                var note = await _dbContext.Notes.FirstOrDefaultAsync(x => x.Id == noteId && x.UserId == UserId);
+                if (note == null)
+                    return Error("Note not found");
+
+                note.IsShared = true;
+                note.ShareLink = shareLink;
+                await _dbContext.SaveChangesAsync();
+                return Success();
+            }
+            catch (Exception ex)
+            {
+                return Error(ex);
+            }
+        }
+
+        // get shared note
+        public async Task<ResponseResult> GetSharedNoteAsync(string shareLink)
+        {
+            try
+            {
+                var note = await _dbContext.Notes
+                    .FirstAsync(x => x.ShareLink == shareLink);
+
+                if (note == null)
+                    return Error("Note not found");
+
+
+                if (!note.IsShared)
+                    return Error("Note not shared");    
+
+                var model = new NoteDTO
+                {
+                    Id = note.Id,
+                    Title = note.Title,
+                    Content = note.Content,
+                    Color = note.Color,
+                    ImageUrl = note.ImageUrl,
+                };
+
+                return Success(model);
+            }
+            catch (Exception ex)
+            {
+                return Error(ex);
+            }
+        }
+
+
+        // is note shared
+        public async Task<bool> IsNoteSharedAsync(string shareLink)
+        {
+            var exist = await _dbContext.Notes.AnyAsync(x => x.ShareLink == shareLink && x.IsShared);
+            return exist;
+        }
     }
 }

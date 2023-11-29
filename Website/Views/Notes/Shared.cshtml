@@ -1,0 +1,25 @@
+﻿@model Data.DTOs.NoteDTO
+@{
+    ViewBag.Title = Model.Title;
+    Layout = "~/Views/Shared/_LayoutAuth.cshtml";
+}
+<div class="login-page">
+    <div class="login-box">
+        <div   id="note-@Model.Id">
+
+            <div class="card card-outline">
+
+                <div class="card-header" style="background-color:@Model.Color">
+                    <h3 class="card-title"> @(Model.Title.Length > 50 ? Model.Title[..50] + " ..." : Model.Title) </h3>
+                </div>
+                @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                {
+                    <img src="@Model.ImageUrl" class="card-img-top">
+                }
+                <div class="card-body">
+                    <p class="card-text">@Model.Content</p>
+                </div>
+            </div>
+        </div>
+        </div>
+        </div>

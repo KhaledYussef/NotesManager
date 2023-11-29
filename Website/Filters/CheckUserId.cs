@@ -22,13 +22,22 @@ namespace Pal.Web.Extensions
 
         public async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
         {
-            var noteId = Convert.ToInt32(context.ActionArguments["id"]);
-            var belongsToUser = await _notesService.IsNoteBelongsToUserAsync(noteId);
-            if (!belongsToUser)
-                context.Result = new UnauthorizedResult();
-            
+            if (!context.ActionArguments.ContainsKey("id"))
+            {
+                await next();
+            }
+            else
+            {
+                var noteId = Convert.ToInt32(context.ActionArguments["id"]);
+                var belongsToUser = await _notesService.IsNoteBelongsToUserAsync(noteId);
+                if (!belongsToUser)
+                    context.Result = new UnauthorizedResult();
 
-            await next();
+
+                await next();
+            }
+
+          
         }
     }
 }

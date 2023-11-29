@@ -27,7 +27,7 @@ namespace Data.DTOs
         [StringLength(500)]
         public string ImageUrl { get; set; }
 
-
+        /// <example>null</example>
         public IFormFile ImageFile { get; set; }
 
 

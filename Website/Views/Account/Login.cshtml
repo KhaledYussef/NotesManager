@@ -2,11 +2,6 @@
 @{
     Layout = "~/Views/Shared/_LayoutAuth.cshtml";
 }
-<style>
-    .login-page {
-        background-color: #fff;
-    }
-</style>
 
 <div class="login-page">
     <div class="login-box">
@@ -19,6 +14,7 @@
                 <p class="login-box-msg">Sign in to start your session</p>
 
                 <form asp-action="Login" method="post">
+                    @Html.ValidationSummary(false, "", new { @class = "text-danger" })
                     <div class="form-group mb-3">
                         <input asp-for="Email" type="email" class="form-control" placeholder="Email">
                         <span asp-validation-for="Email" class="text-danger"></span>

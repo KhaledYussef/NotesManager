@@ -25,6 +25,9 @@
                                 <a href="/Notes/Manage/@note.Id" class="btn btn-tool">
                                     <i class="fas fa-edit"></i>
                                 </a>
+                                <button type="button" class="btn btn-tool" onclick="onShowShareModal(@note.Id)">
+                                    <i class="fas fa-share"></i>
+                                </button>
                             </div>
                         </div>
                         @if (!string.IsNullOrEmpty(note.ImageUrl))
@@ -41,6 +44,41 @@
         </div>
     </div>
 </div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Share Note</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input hidden id="sharedNoteId" />
+                <label>Share Link</label>
+                <div style="display: flex; align-items: center;">
+                    <label class="mr-1">@(Context.Request.Scheme + "://" + Context.Request.Host)/note/ </label>
+
+                    <input type="text" class="form-control" style="max-width:150px" id="shareLink" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="shareNote();">Share</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
 
 
 @section Scripts {
@@ -62,6 +100,32 @@
                 });
 
             })
+        }
+
+        function onShowShareModal(id) {
+            $('#sharedNoteId').val(id);
+            $('#shareLink').val(id);
+            $('#shareModal').modal('show');
+        }
+
+
+        function shareNote() {
+            var id = $('#sharedNoteId').val();
+            var link = $('#shareLink').val();
+
+            $.ajax({
+                url: `/Notes/Share?id=${id}&shareLink=${link}`,
+                type: 'Post',
+                success: function (res) {
+                    if (res.isSuccess) {
+                        $('#shareModal').modal('hide');
+                        navigator.clipboard.writeText("@(Context.Request.Scheme + "://" + Context.Request.Host)/note/" + link );
+                        alert('Link coppied to clipboard');
+                    } else {
+                        ErrorDialog('Error', res.errors[0]);
+                    }
+                }
+            });
         }
     </script>
 }

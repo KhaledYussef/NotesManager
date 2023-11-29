@@ -142,6 +142,23 @@ namespace Website.Controllers
             return View();
         }
 
+
+        public IActionResult ResetPassword(string token, string email)
+        {
+
+            if (token == null || email == null)
+                return RedirectToAction(nameof(Login));
+
+            var model = new ResetPasswordDTO
+            {
+                Token = token,
+                Email = email
+            };
+
+
+            return View(model);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ResetPassword(ResetPasswordDTO model)
@@ -164,6 +181,7 @@ namespace Website.Controllers
 
             return RedirectToAction(nameof(ResetPasswordConfirmation));
         }
+
 
         public IActionResult ResetPasswordConfirmation()
         {

@@ -68,14 +68,6 @@ namespace Pal.Services.FileManager
 
 
         //---------------------------------------------------------------------------------------------------
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="file">File You want yo save</param>
-        /// <param name="folder">sub folder if any</param>
-        /// <param name="generateRandomFileName">to generate random file name</param>
-        /// <param name="mediaType">what ever</param>
-        /// <returns></returns>
         public async Task<string> UploadFileAsync(IFormFile file,
              FileReferenceType referenceType,
             bool generateRandomFileName = false,

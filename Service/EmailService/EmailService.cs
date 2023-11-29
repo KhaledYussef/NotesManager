@@ -19,15 +19,13 @@ namespace Pal.Services.Email
 
         private readonly IConfiguration _configuration;
         private readonly SendGridAccountDetails _sendGridConfig;
-        private readonly IFileManagerService _fileManagerService;
+ 
 
-
-        public EmailService(IConfiguration configuration, IFileManagerService fileManagerService)
+        public EmailService(IConfiguration configuration)
         {
 
             _configuration = configuration;
             _sendGridConfig = _configuration.GetSection("AppSettings:SendGrid").Get<SendGridAccountDetails>();
-            _fileManagerService = fileManagerService;
         }
 
         public async Task<bool> SendEmail(string ToEmail, string ToName, string url, EmailType emailType, params object[] arg)
@@ -61,7 +59,7 @@ namespace Pal.Services.Email
                         {
                             url
                         });
-                        await client.SendEmailAsync(msg);
+                        var result = await client.SendEmailAsync(msg);
                         break;
 
 

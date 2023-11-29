@@ -1,6 +1,7 @@
 ﻿using Core.Domains;
 
 using Data.DTOs;
+using Data.Migrations;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -94,6 +95,27 @@ namespace Website.Controllers
             return Json(result);
         }
 
+
+        [HttpPost]
+        [ServiceFilter(typeof(CheckUserAttribute))]
+        public async Task<IActionResult> Share(int id, string shareLink)
+        {
+            var result = await _notesService.ShareNoteAsync(id, shareLink);
+            return Json(result);
+        }
+
+        [AllowAnonymous]
+        //[Route("Note/{shareLink}")]
+        public async Task<IActionResult> Shared(string shareLink)
+        {
+            var noteResult = await _notesService.GetSharedNoteAsync(shareLink);
+            if (noteResult.IsSuccess)
+            {
+                return View(noteResult.Data);
+            }
+
+            return RedirectToAction("Index", "Home");
+        }
 
     }
 }
