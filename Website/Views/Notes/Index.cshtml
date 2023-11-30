@@ -17,7 +17,7 @@
                     <div class="card card-outline">
 
                         <div class="card-header" style="background-color:@note.Color">
-                            <h3 class="card-title"> @(@note.Title.Length > 50 ? @note.Title[..50] + " ..." : @note.Title) </h3>
+                            <h3 class="card-title" style="color: white; mix-blend-mode: difference; "> @(@note.Title.Length > 50 ? @note.Title[..50] + " ..." : @note.Title) </h3>
                             <div class="card-tools">
                                 <button type="button" class="btn btn-tool" onclick="onDelete(@note.Id)">
                                     <i class="fas fa-times"></i>

@@ -45,12 +45,14 @@ namespace Services
         }
         #endregion
 
-        //TODO: log error
+    
         #region Error
 
         //============//============//============//============//============
         internal ResponseResult Error(Exception ex)
         {
+            _logger.LogErrorAsync(typeof(T).ToString(), ex);
+
             return new ResponseResult
             {
                 IsSuccess = false,
@@ -62,7 +64,7 @@ namespace Services
         //============//============//============//============//============
         internal ResponseResult Error(Exception ex, HttpStatusCode httpStatus)
         {
-            _logger.LogErrorAsync("", ex);
+            _logger.LogErrorAsync(typeof(T).Name, ex);
             return new ResponseResult
             {
                 IsSuccess = false,
@@ -74,6 +76,7 @@ namespace Services
         //============//============//============//============//============
         internal ResponseResult Error(string errorMsg)
         {
+            _logger.LogErrorAsync(typeof(T).Name, errorMsg);
             return new ResponseResult
             {
                 IsSuccess = false,
@@ -85,7 +88,7 @@ namespace Services
         //============//============//============//============//============
         internal ResponseResult Error(string errorMsg, HttpStatusCode httpStatus)
         {
-
+            _logger.LogErrorAsync(typeof(T).Name, errorMsg);
             return new ResponseResult
             {
                 IsSuccess = false,

@@ -164,6 +164,7 @@ namespace Service
             try
             {
                 var notes = await _dbContext.Notes.AsNoTracking()
+                    .Where(a=> !a.IsDeleted)
                     .Where(x => x.UserId == UserId)
                     .ToListAsync();
 
